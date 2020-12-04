@@ -42,15 +42,30 @@ function drawFood(){
 document.addEventListener("keydown", update); //evento de clique do teclado fará ser acionada a função update
 
 function update(event){
-    if(Event.keyCode == 37 && direction != "right") direction ="left";
-    if(Event.keyCode == 38 && direction != "down") direction ="up";
-    if(Event.keyCode == 39 && direction != "left") direction = "right";
-    if(Event.keyCode == 40 && direction != "up") direction="down";
+    if(event.keyCode == 37 && direction != "right") direction ="left";
+    if(event.keyCode == 38 && direction != "down") direction ="up";
+    if(event.keyCode == 39 && direction != "left") direction = "right";
+    if(event.keyCode == 40 && direction != "up") direction="down";
 }
 
 //criação de função que atualiza automaticamente o movimento do jogo
 
 function iniciarJogo(){
+
+    if(snake[0].x > 15 * box && direction == "right") snake[0].x=0;
+    if(snake[0].x < 0 && direction =="left") snake[0].x = 16* box;
+    if(snake[0].y > 15 * box && direction == "down") snake[0].y =0;
+    if(snake[0].y < 0 && direction == "up") snake[0].y = 16* box;
+    
+    //como o i é o corpo da cobrinha, se por um acaso, a posição 0 se chocar com a posição i, ela vai parar o jogo e acionar a função alert do fim do jogo
+    for(i=1; i< snake.length; i++){
+        if(snake[0].x == snake[i].x && snake [0].y == snake[i].y){
+            clearInterval(jogo);
+            alert('Game Over :(');
+
+        }
+    }
+
     criarBG();
     criarCobrinha();
 
@@ -67,7 +82,7 @@ function iniciarJogo(){
     if(snakeX != food.x || snakeY !=food.y){
         snake.pop();  //função pop que retira o ultimo elemento do array da cobrinha
     }
-    else{
+    else{ //faz a comida desaparecer e reaparecer aleatoriamente, após ser comida pela cobra
         food.x = Math.floor(Math.random() * 15 + 1) * box;
         food.y = Math.floor(Math.random() * 15 + 1) * box;
     }   
